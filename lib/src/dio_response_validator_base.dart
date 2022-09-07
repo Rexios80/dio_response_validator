@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:dio_response_validator/src/validated_response.dart';
 
 /// Extension on [Dio] [Response] futures for validation
-extension DioResponseValidator on Future<Response> {
+extension DioResponseValidator<U> on Future<Response<U>> {
   /// Handle errors, validate the response, and optionally [transform] the data
   Future<ValidatedResponse<T>> validate<T>({
-    T Function(dynamic)? transform,
+    T Function(U data)? transform,
   }) async {
     final Response response;
 
