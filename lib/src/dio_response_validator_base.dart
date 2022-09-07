@@ -29,7 +29,7 @@ extension DioResponseValidator on Future<Response> {
     final responseData = response.data;
 
     try {
-      final data = transform?.call(responseData) ?? responseData;
+      final data = transform != null ? transform(responseData) : responseData;
       return ValidatedResponse.success(data, response);
     } catch (e, stacktrace) {
       return ValidatedResponse.error(e, stacktrace, response: response);

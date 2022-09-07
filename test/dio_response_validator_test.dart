@@ -20,14 +20,14 @@ void main() {
   test('Transform success', () async {
     final response = await dio
         .get('https://vrchat.com/api/1/config')
-        .validate(transform: (data) => data['version']);
+        .validate<String>(transform: (data) => data['apiKey']);
     expect(response, isA<SuccessResponse>());
   });
 
   test('Transform failure', () async {
     final response = await dio
         .get('https://vrchat.com/api/1/config')
-        .validate(transform: (data) => data['invalid']!);
+        .validate<String>(transform: (data) => data['invalid']);
     expect(response, isA<ErrorResponse>());
   });
 }

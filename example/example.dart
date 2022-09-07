@@ -5,11 +5,17 @@ void main() async {
   final dio = Dio();
 
   final successResponse =
-      await dio.get('https://vrchat.com/api/1/config').validate();
+      await dio.get('https://vrchat.com/api/1/config').validate(
+            transform: (data) => data['apiKey'],
+          );
+
+  // Prints the api key
   printResponse(successResponse);
 
   final errorResponse =
       await dio.get('https://vrchat.com/api/2/config').validate();
+
+  // Prints a 404 error
   printResponse(errorResponse);
 }
 
