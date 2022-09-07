@@ -18,7 +18,15 @@ abstract class ValidatedResponse<T> {
     StackTrace stacktrace, {
     Response? response,
   }) =>
-      ErrorResponse._(ValidationError(error, stacktrace), response: response);
+      ErrorResponse._(ValidationError._(error, stacktrace), response: response);
+
+  /// Get the success data, if available
+  SuccessResponse<T>? get success =>
+      this is SuccessResponse<T> ? this as SuccessResponse<T> : null;
+
+  /// Get the error data, if available
+  ErrorResponse<T>? get error =>
+      this is ErrorResponse<T> ? this as ErrorResponse<T> : null;
 }
 
 /// A successful [ValidatedResponse]
@@ -29,21 +37,19 @@ class SuccessResponse<T> extends ValidatedResponse<T> {
   @override
   final Response response;
 
-  /// Constructor
   SuccessResponse._(this.data, this.response);
 }
 
 /// An error [ValidatedResponse]
 class ErrorResponse<T> extends ValidatedResponse<T> {
   /// The validation error
-  final ValidationError error;
+  final ValidationError validationError;
 
   @override
   final Response? response;
 
-  /// Constructor
   ErrorResponse._(
-    this.error, {
+    this.validationError, {
     this.response,
   });
 }
@@ -56,6 +62,8 @@ class ValidationError {
   /// The stacktrace
   final StackTrace stacktrace;
 
-  /// Constructor
-  ValidationError(this.error, this.stacktrace);
+  ValidationError._(this.error, this.stacktrace);
+
+  @override
+  String toString() => '$error\n$stacktrace';
 }
