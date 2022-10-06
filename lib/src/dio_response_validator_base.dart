@@ -7,7 +7,7 @@ extension DioResponseValidator<U> on Future<Response<U>> {
   Future<ValidatedResponse<T>> validate<T>({
     T Function(U data)? transform,
   }) async {
-    final Response response;
+    final Response<U> response;
 
     try {
       response = await this;
@@ -29,7 +29,8 @@ extension DioResponseValidator<U> on Future<Response<U>> {
     final responseData = response.data;
 
     try {
-      final data = transform != null ? transform(responseData) : responseData;
+      final data =
+          transform != null ? transform(responseData as U) : responseData as T;
       return ValidatedResponse.success(data, response);
     } catch (e, stacktrace) {
       return ValidatedResponse.error(e, stacktrace, response: response);
