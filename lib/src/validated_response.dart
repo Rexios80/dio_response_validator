@@ -59,4 +59,8 @@ class FailureResponse<U, T> extends ValidatedResponse<U, T> {
 
   @override
   String toString() => '$error\n$stacktrace';
+
+  /// Cast a [FailureResponse] to different types
+  FailureResponse<RU, RT> cast<RU, RT>() =>
+      FailureResponse._(error, stacktrace, response: response);
 }
