@@ -12,38 +12,38 @@ abstract class ValidatedResponse<U, T> {
 
   /// Create a validation success response
   factory ValidatedResponse.success(T data, Response<U> response) =>
-      SuccessResponse._(data, response);
+      ValidResponse._(data, response);
 
-  /// Create a validation error response
+  /// Create a validation failure response
   factory ValidatedResponse.failure(
     Object error,
     StackTrace stacktrace, {
     Response? response,
   }) =>
-      FailureResponse._(error, stacktrace, response: response);
+      InvalidResponse._(error, stacktrace, response: response);
 
   /// Get the success data, if available
-  SuccessResponse<U, T>? get success =>
-      this is SuccessResponse<U, T> ? this as SuccessResponse<U, T> : null;
+  ValidResponse<U, T>? get success =>
+      this is ValidResponse<U, T> ? this as ValidResponse<U, T> : null;
 
-  /// Get the error data, if available
-  FailureResponse<U, T>? get failure =>
-      this is FailureResponse<U, T> ? this as FailureResponse<U, T> : null;
+  /// Get the failure data, if available
+  InvalidResponse<U, T>? get failure =>
+      this is InvalidResponse<U, T> ? this as InvalidResponse<U, T> : null;
 }
 
-/// A successful [ValidatedResponse]
-class SuccessResponse<U, T> extends ValidatedResponse<U, T> {
+/// A valid [ValidatedResponse]
+class ValidResponse<U, T> extends ValidatedResponse<U, T> {
   /// The transformed response data
   final T data;
 
   @override
   final Response<U> response;
 
-  SuccessResponse._(this.data, this.response);
+  ValidResponse._(this.data, this.response);
 }
 
-/// An error [ValidatedResponse]
-class FailureResponse<U, T> extends ValidatedResponse<U, T> {
+/// An invalid [ValidatedResponse]
+class InvalidResponse<U, T> extends ValidatedResponse<U, T> {
   /// The error
   final Object error;
 
@@ -53,7 +53,7 @@ class FailureResponse<U, T> extends ValidatedResponse<U, T> {
   @override
   final Response? response;
 
-  FailureResponse._(
+  InvalidResponse._(
     this.error,
     this.stacktrace, {
     this.response,
@@ -62,7 +62,7 @@ class FailureResponse<U, T> extends ValidatedResponse<U, T> {
   @override
   String toString() => '$error\n$stacktrace';
 
-  /// Cast a [FailureResponse] to different types
-  FailureResponse<RU, RT> cast<RU, RT>() =>
-      FailureResponse._(error, stacktrace, response: response);
+  /// Cast an [InvalidResponse] to different types
+  InvalidResponse<RU, RT> cast<RU, RT>() =>
+      InvalidResponse._(error, stacktrace, response: response);
 }

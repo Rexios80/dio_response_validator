@@ -24,18 +24,18 @@ void main() async {
   // Prints the api key
   printResponse(successResponse);
 
-  final errorResponse =
+  final failureResponse =
       await dio.get('https://vrchat.com/api/2/config').validate();
 
   // Prints a 404 error
-  printResponse(errorResponse);
+  printResponse(failureResponse);
 }
 
 void printResponse(ValidatedResponse response) {
   if (response.success != null) {
     print(response.success!.data);
   } else {
-    print(response.error!.validationError);
+    print(response.failure!);
   }
 }
 
