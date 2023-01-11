@@ -18,10 +18,10 @@ extension DioResponseValidator<U> on Future<Response<U>> {
     }
 
     try {
-      final data = transform != null
-          ? transform(response.data as U)
-          : response.data as T;
-      return ValidatedResponse.success(data, response);
+      return ValidatedResponse.success(
+        transform != null ? transform(response.data as U) : response.data as T,
+        response,
+      );
     } catch (e, stacktrace) {
       return ValidatedResponse.failure(e, stacktrace, response: response);
     }

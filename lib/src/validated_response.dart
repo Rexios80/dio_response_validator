@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 
 /// A validated [Dio] response
+/// - [U] is the raw response data type
+/// - [T] is the transformed response data type
 abstract class ValidatedResponse<U, T> {
   /// The raw response data, if available
   Response? get response;
