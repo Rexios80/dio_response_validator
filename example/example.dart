@@ -23,6 +23,6 @@ void printResponse(ValidatedResponse response) {
   if (response.success != null) {
     print(response.success!.data);
   } else {
-    print(response.error!.validationError);
+    print(response.failure!);
   }
 }

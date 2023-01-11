@@ -14,7 +14,7 @@ void main() {
   test('Validation failure', () async {
     final response =
         await dio.get('https://vrchat.com/api/2/config').validate();
-    expect(response, isA<ErrorResponse>());
+    expect(response, isA<FailureResponse>());
   });
 
   test('Transform success', () async {
@@ -28,6 +28,6 @@ void main() {
     final response = await dio
         .get('https://vrchat.com/api/1/config')
         .validate<String>(transform: (data) => data['invalid']);
-    expect(response, isA<ErrorResponse>());
+    expect(response, isA<FailureResponse>());
   });
 }
