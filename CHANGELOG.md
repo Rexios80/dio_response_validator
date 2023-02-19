@@ -1,3 +1,6 @@
+## 0.2.2
+- Upgrades dio to 5.0.0
+
 ## 0.2.1
 - Adds `transformDioError` field to `validate`
 
