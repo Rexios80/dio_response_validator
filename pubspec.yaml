@@ -4,7 +4,7 @@ version: 0.2.3
 homepage: https://github.com/Rexios80/dio_response_validator
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.6 <4.0.0"
 
 dependencies:
   dio: ^5.0.0
