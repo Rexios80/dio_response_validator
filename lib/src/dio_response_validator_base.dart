@@ -5,16 +5,16 @@ import 'package:dio_response_validator/src/validated_response.dart';
 extension DioResponseValidator<U> on Future<Response<U>> {
   /// Handle errors and validate the response
   /// - Optionally transform the data with [transform]
-  /// - Optionally transform [DioError]s with [transformDioError]
+  /// - Optionally transform [DioException]s with [transformDioError]
   Future<ValidatedResponse<U, T>> validate<T>({
     T Function(U data)? transform,
-    Object Function(DioError error)? transformDioError,
+    Object Function(DioException error)? transformDioError,
   }) async {
     final Response<U> response;
 
     try {
       response = await this;
-    } on DioError catch (e, stacktrace) {
+    } on DioException catch (e, stacktrace) {
       return ValidatedResponse.failure(
         transformDioError != null ? transformDioError(e) : e,
         stacktrace,

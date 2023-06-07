@@ -1,3 +1,6 @@
+## 0.2.3
+- Removes deprecated use of `DioError`
+
 ## 0.2.2
 - Upgrades dio to 5.0.0
 
