@@ -3,7 +3,14 @@ import 'package:dio_response_validator/dio_response_validator.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final dio = Dio();
+  final dio = Dio(
+    BaseOptions(
+      headers: {
+        'User-Agent':
+            'dio_response_validator/0.0.0 Rexios80/dio_response_validator',
+      },
+    ),
+  );
 
   test('Validation success', () async {
     final response =
@@ -29,7 +36,7 @@ void main() {
   test('Transform success', () async {
     final response = await dio
         .get('https://vrchat.com/api/1/config')
-        .validate<String>(transform: (data) => data['apiKey']);
+        .validate<String>(transform: (data) => data['defaultAvatar']);
     expect(response.success, isNotNull);
   });
 
