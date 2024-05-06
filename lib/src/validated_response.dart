@@ -29,6 +29,12 @@ abstract class ValidatedResponse<U, T> {
   /// Get the failure data, if available
   InvalidResponse<U, T>? get failure =>
       this is InvalidResponse<U, T> ? this as InvalidResponse<U, T> : null;
+
+  /// If this is a success response
+  bool get succeeded => success != null;
+
+  /// If this is a failure response
+  bool get failed => failure != null;
 }
 
 /// A valid [ValidatedResponse]

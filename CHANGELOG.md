@@ -1,3 +1,6 @@
+## 0.2.4
+- Adds convenience getters `succeeded` and `failed`
+
 ## 0.2.3
 - Removes deprecated use of `DioError`
 

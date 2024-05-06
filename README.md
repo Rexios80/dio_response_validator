@@ -32,7 +32,7 @@ void main() async {
 }
 
 void printResponse(ValidatedResponse response) {
-  if (response.success != null) {
+  if (response.succeeded) {
     print(response.success!.data);
   } else {
     print(response.failure!);
