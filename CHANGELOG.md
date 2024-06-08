@@ -1,3 +1,6 @@
+## 0.2.5
+- Tightens dependency constraints
+
 ## 0.2.4
 - Adds convenience getters `succeeded` and `failed`
 
