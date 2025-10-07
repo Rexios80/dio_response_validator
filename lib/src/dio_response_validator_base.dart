@@ -47,31 +47,29 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
           InvalidResponse(e, stacktrace, response: success.response),
         );
       }
-    }
-
-    if (failure != null) {
-      if (transformDioException == null) return (null, failure);
-
+    } else if (failure != null) {
       final error = failure.error;
-      if (error is DioException) {
-        try {
-          return (
-            null,
-            InvalidResponse(
-              transformDioException(error),
-              failure.stacktrace,
-              response: failure.response,
-            )
-          );
-        } catch (e, stacktrace) {
-          return (
-            null,
-            InvalidResponse(e, stacktrace, response: failure.response),
-          );
-        }
+      if (transformDioException == null || error is! DioException) {
+        return (null, failure);
       }
-    }
 
-    throw StateError('This should never happen');
+      try {
+        return (
+          null,
+          InvalidResponse(
+            transformDioException(error),
+            failure.stacktrace,
+            response: failure.response,
+          )
+        );
+      } catch (e, stacktrace) {
+        return (
+          null,
+          InvalidResponse(e, stacktrace, response: failure.response),
+        );
+      }
+    } else {
+      throw StateError('This should never happen');
+    }
   }
 }
