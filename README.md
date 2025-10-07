@@ -17,16 +17,18 @@ import 'package:dio_response_validator/dio_response_validator.dart';
 void main() async {
   final dio = Dio();
 
-  final successResponse =
-      await dio.get('https://vrchat.com/api/1/config').validate().transform(
-            transform: (data) => data['apiKey'],
-          );
+  final successResponse = await dio
+      .get('https://jsonplaceholder.typicode.com/todos/1')
+      .validate()
+      .transform(
+        transform: (data) => data['apiKey'],
+      );
 
   // Prints the api key
   printResponse(successResponse);
 
   final failureResponse =
-      await dio.get('https://vrchat.com/api/2/config').validate();
+      await dio.get('https://jsonplaceholder.typicode.com/todos/0').validate();
 
   // Prints a 404 error
   printResponse(failureResponse);
