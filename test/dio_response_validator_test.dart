@@ -6,44 +6,49 @@ void main() {
   final dio = Dio(
     BaseOptions(
       headers: {
+        // For some reason a properly formatter user-agent wasn't working
+        // So here's a browser user-agent
         'User-Agent':
-            'dio_response_validator/0.0.0 Rexios80/dio_response_validator',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15',
       },
     ),
   );
 
   test('Validation success', () async {
-    final response =
+    final (success, failure) =
         await dio.get('https://vrchat.com/api/1/config').validate();
-    expect(response.success, isNotNull);
+    expect(success, isNotNull);
   });
 
   test('Validation failure', () async {
-    final response =
+    final (success, failure) =
         await dio.get('https://vrchat.com/api/2/config').validate();
-    expect(response.failure, isNotNull);
-    expect(response.failure!.error, isNot(isA<String>()));
+    expect(failure, isNotNull);
+    expect(failure!.error, isNot(isA<String>()));
   });
 
   test('Transform DioException', () async {
-    final response = await dio.get('https://vrchat.com/api/2/config').validate(
-          transformDioError: (error) =>
-              error.response?.data['message'] ?? 'Unknown error',
-        );
-    expect(response.failure!.error, isA<String>());
+    final (success, failure) =
+        await dio.get('https://vrchat.com/api/2/config').validate().transform(
+              transformDioException: (error) =>
+                  error.response?.data['message'] ?? 'Unknown error',
+            );
+    expect(failure!.error, isA<String>());
   });
 
   test('Transform success', () async {
-    final response = await dio
+    final (success, failure) = await dio
         .get('https://vrchat.com/api/1/config')
-        .validate<String>(transform: (data) => data['defaultAvatar']);
-    expect(response.success, isNotNull);
+        .validate()
+        .transform(transform: (data) => data['defaultAvatar']);
+    expect(success, isNotNull);
   });
 
   test('Transform failure', () async {
-    final response = await dio
+    final (success, failure) = await dio
         .get('https://vrchat.com/api/1/config')
-        .validate<String>(transform: (data) => data['invalid']);
-    expect(response.failure, isNotNull);
+        .validate()
+        .transform(transform: (data) => data['invalid'] as String);
+    expect(failure, isNotNull);
   });
 }

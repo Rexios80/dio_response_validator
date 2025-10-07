@@ -5,7 +5,7 @@ void main() async {
   final dio = Dio();
 
   final successResponse =
-      await dio.get('https://vrchat.com/api/1/config').validate(
+      await dio.get('https://vrchat.com/api/1/config').validate().transform(
             transform: (data) => data['apiKey'],
           );
 
@@ -20,9 +20,12 @@ void main() async {
 }
 
 void printResponse(ValidatedResponse response) {
-  if (response.succeeded) {
-    print(response.success!.data);
+  final (success, failure) = response;
+  if (success != null) {
+    print(success.data);
+  } else if (failure != null) {
+    print(failure);
   } else {
-    print(response.failure!);
+    throw 'This should never happen';
   }
 }

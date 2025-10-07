@@ -20,19 +20,20 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 }
 
 /// Extension on [ValidatedResponse] for transforming the response data
-extension ValidatedResponseTransformer<U, T> on ValidatedResponse<U, U> {
+extension ValidatedResponseTransformer<U, T>
+    on Future<ValidatedResponse<U, U>> {
   /// - Optionally transform the data with [transform]
   /// - Optionally transform [DioException]s with [transformDioException]
-  ValidatedResponse<U, T> transform({
+  Future<ValidatedResponse<U, T>> transform({
     T Function(U data)? transform,
     Object Function(DioException error)? transformDioException,
-  }) {
+  }) async {
     assert(
       transform != null || transformDioException != null,
       'Either transform or transformDioException must be provided',
     );
 
-    final (success, failure) = this;
+    final (success, failure) = await this;
     if (transform != null && success != null) {
       try {
         return (ValidResponse(transform(success.data), success.response), null);
