@@ -66,6 +66,6 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
       }
     }
 
-    throw 'This should never happen';
+    throw StateError('This should never happen');
   }
 }
