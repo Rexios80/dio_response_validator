@@ -6,7 +6,7 @@ void main() {
   final dio = Dio(
     BaseOptions(
       headers: {
-        // For some reason a properly formatter user-agent wasn't working
+        // For some reason a properly formatted user-agent wasn't working
         // So here's a browser user-agent
         'User-Agent':
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15',
