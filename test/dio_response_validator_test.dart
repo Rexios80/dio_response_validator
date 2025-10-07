@@ -35,7 +35,7 @@ void main() {
     final (success, failure) = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
-        .transform(transform: (data) => data['defaultAvatar']);
+        .transform<String>(transform: (data) => data['title']);
     expect(success, isNotNull);
   });
 
@@ -43,7 +43,7 @@ void main() {
     final (success, failure) = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
-        .transform(transform: (data) => data['invalid'] as String);
+        .transform<String>(transform: (data) => data['invalid']);
     expect(failure, isNotNull);
   });
 }
