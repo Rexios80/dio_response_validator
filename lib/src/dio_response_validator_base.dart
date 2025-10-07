@@ -34,7 +34,11 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
     );
 
     final (success, failure) = await this;
-    if (transform != null && success != null) {
+    if (success != null) {
+      if (transform == null) {
+        return (ValidResponse(success.data as T, success.response), null);
+      }
+
       try {
         return (ValidResponse(transform(success.data), success.response), null);
       } catch (e, stacktrace) {
@@ -45,24 +49,26 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
       }
     }
 
-    final error = failure?.error;
-    if (transformDioException != null &&
-        failure != null &&
-        error is DioException) {
-      try {
-        return (
-          null,
-          InvalidResponse(
-            transformDioException(error),
-            failure.stacktrace,
-            response: failure.response,
-          )
-        );
-      } catch (e, stacktrace) {
-        return (
-          null,
-          InvalidResponse(e, stacktrace, response: failure.response),
-        );
+    if (failure != null) {
+      if (transformDioException == null) return (null, failure);
+
+      final error = failure.error;
+      if (error is DioException) {
+        try {
+          return (
+            null,
+            InvalidResponse(
+              transformDioException(error),
+              failure.stacktrace,
+              response: failure.response,
+            )
+          );
+        } catch (e, stacktrace) {
+          return (
+            null,
+            InvalidResponse(e, stacktrace, response: failure.response),
+          );
+        }
       }
     }
 
