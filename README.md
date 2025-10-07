@@ -39,7 +39,7 @@ void printResponse(ValidatedResponse response) {
   } else if (failure != null) {
     print(failure);
   } else {
-    throw 'This should never happen';
+    throw StateError('This should never happen');
   }
 }
 
