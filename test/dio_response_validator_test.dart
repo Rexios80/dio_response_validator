@@ -25,7 +25,7 @@ void main() {
     expect(response.failure!.error, isNot(isA<String>()));
   });
 
-  test('Transform DioError', () async {
+  test('Transform DioException', () async {
     final response = await dio.get('https://vrchat.com/api/2/config').validate(
           transformDioError: (error) =>
               error.response?.data['message'] ?? 'Unknown error',
