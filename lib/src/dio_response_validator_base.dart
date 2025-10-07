@@ -4,7 +4,7 @@ import 'package:dio_response_validator/src/validated_response.dart';
 /// Extension on [Dio] [Response] futures for validation
 extension DioResponseValidator<U> on Future<Response<U>> {
   /// Handle errors and validate the response
-  Future<ValidatedResponse<U, U>> validate() async {
+  Future<ValidatedResponse<U>> validate() async {
     final Response<U> response;
 
     try {
@@ -20,11 +20,11 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 }
 
 /// Extension on [ValidatedResponse] for transforming the response data
-extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U, U>> {
+extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
   /// Transforms the response data from [U] to [T]
   /// - Optionally transform the data with [transform]
   /// - Optionally transform [DioException]s with [transformDioException]
-  Future<ValidatedResponse<U, T>> transform<T>({
+  Future<TransformedResponse<U, T>> transform<T>({
     T Function(U data)? transform,
     Object Function(DioException error)? transformDioException,
   }) async {

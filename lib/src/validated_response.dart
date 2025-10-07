@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 
 /// A validated response
-typedef ValidatedResponse<U, T> = (ValidResponse<U, T>?, InvalidResponse?);
+typedef ValidatedResponse<U> = (ValidResponse<U, U>?, InvalidResponse?);
+
+/// A transformed [ValidatedResponse]
+typedef TransformedResponse<U, T> = (ValidResponse<U, T>?, InvalidResponse?);
 
 /// A valid [ValidatedResponse]
 /// - [U] is the raw response data type
