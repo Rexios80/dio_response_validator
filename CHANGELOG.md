@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+- Fixes example
+
 ## 0.3.0
 
 - `ValidatedResponse` is now a record of `(ValidResponse?, InvalidResponse?)`
