@@ -19,7 +19,7 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 }
 
 /// Extension on [ValidatedResponse] for transforming the response data
-extension ValidatedResponseTransformer<U> on Future<TransformedResponse<U, U>> {
+extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
   /// Transforms the response data from [U] to [T]
   /// - Optionally transform the data with [transform]
   /// - Optionally transform [DioException]s with [transformDioException]

@@ -1,7 +1,8 @@
 ## 0.3.0
 
-- `ValidatedResponse` is now a record of `(ValidResponse?, InvalidResponse?)`
-- Adds `TransformedResponse` type
+- `ValidatedResponse` now has one type parameter
+- Adds `TransformedResponse` type with two type parameters
+- `TransformedResponse` is a sealed class to allow type safe pattern matching
 - Transform is now an extension method on `ValidatedResponse`
 - `transformDioError` is now `transformDioException`
 
