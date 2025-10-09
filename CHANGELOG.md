@@ -1,6 +1,6 @@
-## 0.3.0+1
+## 0.3.1
 
-- Fixes example
+- Documentation cleanup
 
 ## 0.3.0
 
