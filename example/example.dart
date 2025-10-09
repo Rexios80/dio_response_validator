@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:dio_response_validator/dio_response_validator.dart';
+import 'todo.dart';
+
+typedef Json = Map<String, dynamic>;
 
 void main() async {
   final dio = Dio();
 
   final successResponse = await dio
-      .get('https://jsonplaceholder.typicode.com/todos/1')
+      .get<Json>('https://jsonplaceholder.typicode.com/todos/1')
       .validate()
-      .transform<String>(data: (data) => data['title']);
+      .transform(data: Todo.fromJson);
 
   // Prints the api key
   printResponse(successResponse);
