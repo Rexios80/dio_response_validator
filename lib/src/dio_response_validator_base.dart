@@ -9,17 +9,17 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 
     try {
       response = await this;
-      return (ValidResponse(response.data as U, response), null);
+      return ValidResponse<U, U>(response.data as U, response);
     } on DioException catch (e, stacktrace) {
-      return (null, InvalidResponse(e, stacktrace, response: e.response));
+      return InvalidResponse(e, stacktrace, response: e.response);
     } catch (e, stacktrace) {
-      return (null, InvalidResponse(e, stacktrace));
+      return InvalidResponse(e, stacktrace);
     }
   }
 }
 
 /// Extension on [ValidatedResponse] for transforming the response data
-extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
+extension ValidatedResponseTransformer<U> on Future<TransformedResponse<U, U>> {
   /// Transforms the response data from [U] to [T]
   /// - Optionally transform the data with [transform]
   /// - Optionally transform [DioException]s with [transformDioException]
@@ -32,43 +32,32 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
       'Either transform or transformDioException must be provided',
     );
 
-    final (success, failure) = await this;
-    if (success != null) {
-      try {
-        if (transform == null) {
-          return (ValidResponse(success.data as T, success.response), null);
+    final response = await this;
+    switch (response) {
+      case ValidResponse(data: final data):
+        try {
+          if (transform == null) {
+            return ValidResponse(data as T, response.response);
+          }
+
+          return ValidResponse(transform(response.data), response.response);
+        } catch (e, stacktrace) {
+          return InvalidResponse(e, stacktrace, response: response.response);
+        }
+      case InvalidResponse(error: final error):
+        if (transformDioException == null || error is! DioException) {
+          return response.cast();
         }
 
-        return (ValidResponse(transform(success.data), success.response), null);
-      } catch (e, stacktrace) {
-        return (
-          null,
-          InvalidResponse(e, stacktrace, response: success.response),
-        );
-      }
-    } else if (failure != null) {
-      final error = failure.error;
-      if (transformDioException == null || error is! DioException) {
-        return (null, failure);
-      }
-
-      try {
-        return (
-          null,
-          InvalidResponse(
+        try {
+          return InvalidResponse(
             transformDioException(error),
-            failure.stacktrace,
-            response: failure.response,
-          )
-        );
-      } catch (e, stacktrace) {
-        return (
-          null,
-          InvalidResponse(e, stacktrace, response: failure.response),
-        );
-      }
-    } else {
-      throw StateError('This should never happen');
+            response.stacktrace,
+            response: response.response,
+          );
+        } catch (e, stacktrace) {
+          return InvalidResponse(e, stacktrace, response: response.response);
+        }
     }
   }
 }

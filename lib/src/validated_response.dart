@@ -1,19 +1,22 @@
 import 'package:dio/dio.dart';
 
-/// A validated response
-typedef ValidatedResponse<U> = (ValidResponse<U, U>?, InvalidResponse?);
+typedef ValidatedResponse<U> = TransformedResponse<U, U>;
 
-/// A transformed [ValidatedResponse]
-typedef TransformedResponse<U, T> = (ValidResponse<U, T>?, InvalidResponse?);
+sealed class TransformedResponse<U, T> {
+  /// The raw response data, if available
+  Response? get response;
+
+  const TransformedResponse();
+}
 
 /// A valid [ValidatedResponse]
 /// - [U] is the raw response data type
 /// - [T] is the transformed response data type
-class ValidResponse<U, T> {
+class ValidResponse<U, T> extends TransformedResponse<U, T> {
   /// The transformed response data
   final T data;
 
-  /// The raw response data
+  @override
   final Response<U> response;
 
   /// Constructor
@@ -21,14 +24,14 @@ class ValidResponse<U, T> {
 }
 
 /// An invalid [ValidatedResponse]
-class InvalidResponse {
+class InvalidResponse<U, T> extends TransformedResponse<U, T> {
   /// The error
   final Object error;
 
   /// The stacktrace
   final StackTrace stacktrace;
 
-  /// The raw response data, if available
+  @override
   final Response? response;
 
   /// Constructor
@@ -40,4 +43,8 @@ class InvalidResponse {
 
   @override
   String toString() => '$error\n$stacktrace';
+
+  /// Cast an [InvalidResponse] to different types
+  InvalidResponse<RU, RT> cast<RU, RT>() =>
+      InvalidResponse(error, stacktrace, response: response);
 }

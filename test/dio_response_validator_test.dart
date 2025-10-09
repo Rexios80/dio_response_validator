@@ -6,18 +6,18 @@ void main() {
   final dio = Dio();
 
   test('Validation success', () async {
-    final (success, failure) = await dio
+    final response = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate();
-    expect(success, isNotNull);
+    expect(response, isA<ValidResponse>());
   });
 
   test('Validation failure', () async {
-    final (success, failure) = await dio
+    final response = await dio
         .get('https://jsonplaceholder.typicode.com/todos/0')
         .validate();
-    expect(failure, isNotNull);
-    expect(failure!.error, isNot(isA<String>()));
+    expect(response, isA<InvalidResponse>());
+    expect(response.error, isNot(isA<String>()));
   });
 
   test('Transform DioException', () async {
