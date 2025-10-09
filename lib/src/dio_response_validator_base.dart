@@ -9,13 +9,12 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 
     try {
       response = await this;
+      return (ValidResponse(response.data as U, response), null);
     } on DioException catch (e, stacktrace) {
       return (null, InvalidResponse(e, stacktrace, response: e.response));
     } catch (e, stacktrace) {
       return (null, InvalidResponse(e, stacktrace));
     }
-
-    return (ValidResponse(response.data as U, response), null);
   }
 }
 
@@ -35,11 +34,11 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
 
     final (success, failure) = await this;
     if (success != null) {
-      if (transform == null) {
-        return (ValidResponse(success.data as T, success.response), null);
-      }
-
       try {
+        if (transform == null) {
+          return (ValidResponse(success.data as T, success.response), null);
+        }
+
         return (ValidResponse(transform(success.data), success.response), null);
       } catch (e, stacktrace) {
         return (
