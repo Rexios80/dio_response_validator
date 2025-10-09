@@ -33,13 +33,11 @@ void main() async {
 }
 
 void printResponse(ValidatedResponse response) {
-  final (success, failure) = response;
-  if (success != null) {
-    print(success.data);
-  } else if (failure != null) {
-    print(failure);
-  } else {
-    throw StateError('This should never happen');
+  switch (response) {
+    case ValidResponse(data: final data):
+      print(data);
+    case InvalidResponse(error: final error):
+      print(error);
   }
 }
 
