@@ -17,33 +17,33 @@ void main() {
         .get('https://jsonplaceholder.typicode.com/todos/0')
         .validate();
     expect(response, isA<InvalidResponse>());
-    expect(response.error, isNot(isA<String>()));
+    expect((response as InvalidResponse).error, isNot(isA<String>()));
   });
-
+  
   test('Transform DioException', () async {
-    final (success, failure) = await dio
+    final response = await dio
         .get('https://jsonplaceholder.typicode.com/todos/0')
         .validate()
         .transform(
           transformDioException: (error) =>
               error.response?.data['message'] ?? 'Unknown error',
         );
-    expect(failure!.error, isA<String>());
+    expect((response as InvalidResponse).error, isA<String>());
   });
 
   test('Transform success', () async {
-    final (success, failure) = await dio
+    final response = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
         .transform<String>(transform: (data) => data['title']);
-    expect(success, isNotNull);
+    expect(response, isA<ValidResponse>());
   });
 
   test('Transform failure', () async {
-    final (success, failure) = await dio
+    final response = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
         .transform<String>(transform: (data) => data['invalid']);
-    expect(failure, isNotNull);
+    expect(response, isA<InvalidResponse>());
   });
 }

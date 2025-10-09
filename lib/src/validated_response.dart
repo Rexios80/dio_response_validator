@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 
+/// A validated [Dio] response
 typedef ValidatedResponse<U> = TransformedResponse<U, U>;
 
+/// A transformed [Dio] response
+/// - [U] is the raw response data type
+/// - [T] is the transformed response data type
 sealed class TransformedResponse<U, T> {
   /// The raw response data, if available
   Response? get response;
@@ -10,8 +14,6 @@ sealed class TransformedResponse<U, T> {
 }
 
 /// A valid [ValidatedResponse]
-/// - [U] is the raw response data type
-/// - [T] is the transformed response data type
 class ValidResponse<U, T> extends TransformedResponse<U, T> {
   /// The transformed response data
   final T data;
