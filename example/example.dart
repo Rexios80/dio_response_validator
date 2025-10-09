@@ -7,7 +7,7 @@ void main() async {
   final successResponse = await dio
       .get('https://jsonplaceholder.typicode.com/todos/1')
       .validate()
-      .transform<String>(transform: (data) => data['title']);
+      .transform<String>(data: (data) => data['title']);
 
   // Prints the api key
   printResponse(successResponse);

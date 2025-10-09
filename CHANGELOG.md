@@ -3,7 +3,6 @@
 - `ValidatedResponse` is now a record of `(ValidResponse?, InvalidResponse?)`
 - Adds `TransformedResponse` type
 - Transform is now an extension method on `ValidatedResponse`
-- `transformDioError` is now `transformDioException`
 
 ## 0.2.5
 

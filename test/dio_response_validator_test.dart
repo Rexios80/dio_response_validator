@@ -25,7 +25,7 @@ void main() {
         .get('https://jsonplaceholder.typicode.com/todos/0')
         .validate()
         .transform(
-          transformDioException: (error) =>
+          dioException: (error) =>
               error.response?.data['message'] ?? 'Unknown error',
         );
     expect(failure!.error, isA<String>());
@@ -35,7 +35,7 @@ void main() {
     final (success, failure) = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
-        .transform<String>(transform: (data) => data['title']);
+        .transform<String>(data: (data) => data['title']);
     expect(success, isNotNull);
   });
 
@@ -43,7 +43,7 @@ void main() {
     final (success, failure) = await dio
         .get('https://jsonplaceholder.typicode.com/todos/1')
         .validate()
-        .transform<String>(transform: (data) => data['invalid']);
+        .transform<String>(data: (data) => data['invalid']);
     expect(failure, isNotNull);
   });
 }

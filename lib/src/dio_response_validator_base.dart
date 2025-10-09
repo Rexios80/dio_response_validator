@@ -21,25 +21,25 @@ extension DioResponseValidator<U> on Future<Response<U>> {
 /// Extension on [ValidatedResponse] for transforming the response data
 extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
   /// Transforms the response data from [U] to [T]
-  /// - Optionally transform the data with [transform]
-  /// - Optionally transform [DioException]s with [transformDioException]
+  /// - Optionally transform the data with [data]
+  /// - Optionally transform [DioException]s with [dioException]
   Future<TransformedResponse<U, T>> transform<T>({
-    T Function(U data)? transform,
-    Object Function(DioException error)? transformDioException,
+    T Function(U data)? data,
+    Object Function(DioException error)? dioException,
   }) async {
     assert(
-      transform != null || transformDioException != null,
+      data != null || dioException != null,
       'Either transform or transformDioException must be provided',
     );
 
     final (success, failure) = await this;
     if (success != null) {
       try {
-        if (transform == null) {
+        if (data == null) {
           return (ValidResponse(success.data as T, success.response), null);
         }
 
-        return (ValidResponse(transform(success.data), success.response), null);
+        return (ValidResponse(data(success.data), success.response), null);
       } catch (e, stacktrace) {
         return (
           null,
@@ -48,7 +48,7 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
       }
     } else if (failure != null) {
       final error = failure.error;
-      if (transformDioException == null || error is! DioException) {
+      if (dioException == null || error is! DioException) {
         return (null, failure);
       }
 
@@ -56,7 +56,7 @@ extension ValidatedResponseTransformer<U> on Future<ValidatedResponse<U>> {
         return (
           null,
           InvalidResponse(
-            transformDioException(error),
+            dioException(error),
             failure.stacktrace,
             response: failure.response,
           )
